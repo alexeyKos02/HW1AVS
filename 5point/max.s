@@ -4,35 +4,35 @@
 	.align 4
 	.type	MAX_SIZE, @object
 	.size	MAX_SIZE, 4
-MAX_SIZE:				# максимальная длина массива
-	.long	1000			# значение этой длины
-	.local	ARRAY_A			# массив считывания
-	.comm	ARRAY_A,4000,32		# память под этот массив
-	.local	ARRAY_B			# преобразованный массив
-	.comm	ARRAY_B,4000,32		# память под этот массив
+MAX_SIZE:						# максимальная длина массива
+	.long	1000					# значение этой длины
+	.local	ARRAY_A					# массив считывания
+	.comm	ARRAY_A,4000,32				# память под этот массив
+	.local	ARRAY_B					# преобразованный массив
+	.comm	ARRAY_B,4000,32				# память под этот массив
 	.text
-	.globl	compare			#
+	.globl	compare	
 	.type	compare, @function	
 compare:
 	endbr64
 	push	rbp
 	mov	rbp, rsp
-	mov	DWORD PTR -20[rbp], edi     # записываем переменную, которую передали в функцию
+	mov	DWORD PTR -20[rbp], edi     		# записываем переменную, которую передали в функцию
 	mov	DWORD PTR -4[rbp], 0
 	jmp	.L2
 .L6:
 	mov	eax, DWORD PTR -4[rbp]
 	cdqe
-	lea	rdx, 0[0+rax*4]
-	lea	rax, ARRAY_A[rip]
-	mov	eax, DWORD PTR [rdx+rax]
-	test	eax, eax                # сравнение элемента массива с нулем
+	lea	rdx, 0[0+rax*4]				#этри три строчки реализуют переход к j элементу в массиве
+	lea	rax, ARRAY_A[rip]			#
+	mov	eax, DWORD PTR [rdx+rax]		#
+	test	eax, eax                		# сравнение элемента массива с нулем
 	jle	.L3
 	mov	eax, DWORD PTR -4[rbp]
 	cdqe
 	lea	rdx, 0[0+rax*4]
 	lea	rax, ARRAY_B[rip]
-	mov	DWORD PTR [rdx+rax], 1      # элемент массива приравнивает к единице
+	mov	DWORD PTR [rdx+rax], 1     		# элемент массива приравнивает к единице
 	jmp	.L4
 .L3:
 	mov	eax, DWORD PTR -4[rbp]
@@ -40,25 +40,25 @@ compare:
 	lea	rdx, 0[0+rax*4]
 	lea	rax, ARRAY_A[rip]
 	mov	eax, DWORD PTR [rdx+rax]
-	test	eax, eax                # сравнивает с нулем
+	test	eax, eax                		# сравнивает с нулем
 	jns	.L5
 	mov	eax, DWORD PTR -4[rbp]
 	cdqe
 	lea	rdx, 0[0+rax*4]
 	lea	rax, ARRAY_B[rip]
-	mov	DWORD PTR [rdx+rax], -1     # элемент массива приравнивается к -1
+	mov	DWORD PTR [rdx+rax], -1     		# элемент массива приравнивается к -1
 	jmp	.L4
 .L5:
 	mov	eax, DWORD PTR -4[rbp]
 	cdqe
 	lea	rdx, 0[0+rax*4]
 	lea	rax, ARRAY_B[rip]
-	mov	DWORD PTR [rdx+rax], 0      # элемент приравнивается к 0
+	mov	DWORD PTR [rdx+rax], 0      		# элемент приравнивается к 0
 .L4:
 	add	DWORD PTR -4[rbp], 1
 .L2:
-	mov	eax, DWORD PTR -4[rbp]
-	cmp	eax, DWORD PTR -20[rbp]            # проверка в цикле for на то что не провосходит заданной длины
+	mov	eax, DWORD PTR -4[rbp]			#запись значения j  в eax
+	cmp	eax, DWORD PTR -20[rbp]            	# проверка в цикле for на то что не провосходит заданной длины
 	jl	.L6
 	nop
 	nop
@@ -67,7 +67,7 @@ compare:
 	.size	compare, .-compare
 	.section	.rodata
 .LC0:
-	.string	"%d"				# строка для ввода.
+	.string	"%d"					# строка для ввода.
 .LC1:
 	.string	"enter size is too big"		
 	.text
@@ -85,7 +85,7 @@ main:
 	lea	rax, .LC0[rip]
 	mov	rdi, rax
 	mov	eax, 0
-	call	__isoc99_scanf@PLT                  #считывание значения n
+	call	__isoc99_scanf@PLT                  	#считывание значения n
 	mov	edx, DWORD PTR -12[rbp]                 # запись в edx значения n
 	mov	eax, DWORD PTR MAX_SIZE[rip]            # запись в eax значение максимальной длины
 	cmp	edx, eax                                #сравнение n и MAX_SIZE
@@ -104,10 +104,10 @@ main:
 	lea	rax, .LC0[rip]
 	mov	rdi, rax
 	mov	eax, 0
-	call	__isoc99_scanf@PLT                  #вызывает функция считывания.
+	call	__isoc99_scanf@PLT                  	#вызывает функция считывания.
 	mov	eax, DWORD PTR -16[rbp]                 # запись в eax введенного значения.
 	mov	edx, DWORD PTR -4[rbp]                  #эти строки реализуют свдиг в массиве к j элементу.
-	movsx	rdx, edx                            #
+	movsx	rdx, edx                            	#
 	lea	rcx, 0[0+rdx*4]                         #
 	lea	rdx, ARRAY_A[rip]                       #
 	mov	DWORD PTR [rcx+rdx], eax                # приравнивает значение в массиве к введеному числу
@@ -116,9 +116,9 @@ main:
 	mov	eax, DWORD PTR -12[rbp]                 # запись в eax значения n
 	cmp	DWORD PTR -4[rbp], eax                  # сравнение j и n
 	jl	.L11
-	mov	eax, DWORD PTR -12[rbp]
-	mov	edi, eax
-	call	compare                             # вызов функции compare
+	mov	eax, DWORD PTR -12[rbp]			
+	mov	edi, eax				# запись значения n  в edi
+	call	compare                             	# вызов функции compare
 	mov	DWORD PTR -8[rbp], 0
 	jmp	.L12
 .L13:
