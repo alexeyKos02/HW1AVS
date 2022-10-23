@@ -3,4 +3,4 @@
 # 4 балла
   > ![im1](images/4.png)
 ## Программа на С++
-[Example]: (point/max.c)
+[Example]: (/point/max.c)
