@@ -3,4 +3,5 @@
 # 4 балла
   > ![im1](images/4.png)
 ## Программа на С++
-[Example] (/4 point/max.c)
+[](/4 point/max.c)
+Расположена в папке 4 point, под названием max.c
